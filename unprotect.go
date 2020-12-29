@@ -10,9 +10,9 @@ import (
 
 func main() {
 	if len(os.Args) != 2 {
+		fmt.Println("This programs removes the protection from all sheets in the XLSX")
 		fmt.Println("Usage: unprotect.exe FILENAME.xlsx")
 		fmt.Println()
-		fmt.Println("This programs removes the sheet protection from all sheets.")
 		fmt.Println("The result is written into FILENAME_unprotected.xlsx.")
 		fmt.Println("The original file remains unchanged.")
 		return

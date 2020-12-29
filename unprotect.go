@@ -33,20 +33,11 @@ func main() {
 		}
 	}
 
-	outputFilename := outputFile(filename)
+	outputFilename := strings.Replace(filename, ".xlsx", "", -1) + "_unprotected.xlsx"
 	if err := f.SaveAs(outputFilename); err != nil {
 		fmt.Println("Could not write output file:", err)
 		return
 	}
 	fmt.Println()
 	fmt.Println("Done --> Output in", outputFilename)
-}
-
-func outputFile(inputFile string) string {
-	file0 := strings.Split(inputFile, ".")
-	if len(file0) > 0 {
-		file0 = file0[:len(file0)-1]
-	}
-	outputFile := strings.Join(file0, "") + "_unprotected.xlsx"
-	return strings.Replace(outputFile, "\\", "", -1)
 }

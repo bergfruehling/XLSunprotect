@@ -11,10 +11,11 @@ import (
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Println("This programs removes the protection from all sheets in the XLSX")
-		fmt.Println("Usage: unprotect.exe FILENAME.xlsx")
 		fmt.Println()
-		fmt.Println("The result is written into FILENAME_unprotected.xlsx.")
-		fmt.Println("The original file remains unchanged.")
+		fmt.Println("USAGE: unprotect.exe <filename>.xlsx")
+		fmt.Println()
+		fmt.Println("- The result is written into <filename>_unprotected.xlsx")
+		fmt.Println("- The original file remains unchanged")
 		return
 	}
 
@@ -38,6 +39,5 @@ func main() {
 		fmt.Println("Could not write output file:", err)
 		return
 	}
-	fmt.Println()
 	fmt.Println("Done --> Output in", outputFilename)
 }

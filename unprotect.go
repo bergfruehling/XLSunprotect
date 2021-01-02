@@ -2,16 +2,19 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-package xlsunprotect
+package main
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/fatih/color"
 )
+
+var printError = color.New(color.Bold, color.FgRed).PrintlnFunc()
 
 func main() {
 	if len(os.Args) != 2 {
@@ -26,29 +29,33 @@ func main() {
 
 	filename := os.Args[1]
 	f, err := excelize.OpenFile(filename)
-	fatalOnErr(err, "Could not open file: ")
+	fatalOnErr(err)
 
-	log.Println("Removing protection from", filename)
+	fmt.Println("Removing protection from", filename)
 	for _, name := range f.GetSheetMap() {
-		log.Println("Unprotecting", name, "...")
+		fmt.Println("Unprotecting", name, "...")
 		err := f.UnprotectSheet(name)
-		fatalOnErr(err, "Could not remove protection for "+name)
+		fatalOnErr(err)
 	}
 
-	log.Println("Removing workbook protection...")
+	fmt.Println("Removing workbook protection...")
 	f.WorkBook.WorkbookProtection.LockStructure = false
 	f.WorkBook.WorkbookProtection.LockRevision = false
 	f.WorkBook.WorkbookProtection.LockWindows = false
 
 	outputFilename := strings.Replace(filename, ".xlsx", "", -1) + "_unprotected.xlsx"
-	err = f.SaveAs(outputFilename)
-	fatalOnErr(err, "Could not write output file:")
-
-	log.Println("Done --> Output in", outputFilename)
+	if _, err = os.Stat(outputFilename); os.IsNotExist(err) {
+		err = f.SaveAs(outputFilename)
+		fatalOnErr(err)
+		color.Green("Done --> Output in " + outputFilename)
+	} else {
+		fatalOnErr(errors.New(outputFilename + " already exists...exiting."))
+	}
 }
 
-func fatalOnErr(err error, msg string) {
+func fatalOnErr(err error) {
 	if err != nil {
-		log.Fatal(msg, err)
+		printError(err)
+		os.Exit(1)
 	}
 }

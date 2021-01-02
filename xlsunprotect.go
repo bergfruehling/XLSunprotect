@@ -19,6 +19,7 @@ var printError = color.New(color.Bold, color.FgRed).PrintlnFunc()
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Println("This programs removes the protection from all sheets in the XLSX")
+		fmt.Println("https://github.com/bergfruehling/XLSunprotect")
 		fmt.Println()
 		fmt.Println("USAGE: unprotect.exe <filename>.xlsx")
 		fmt.Println()

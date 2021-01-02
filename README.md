@@ -1,13 +1,35 @@
 # XLSunprotect
-XLSunprotect is a commandline tool written in go to remove the workbook and worksheet protection from .xlsx files. It is powered by [excelize](https://github.com/360EntSecGroup-Skylar/excelize).
+XLSunprotect is a commandline tool written in go to remove the workbook and worksheet protection from Excel files (.xlsx). It is powered by [excelize](https://github.com/360EntSecGroup-Skylar/excelize).
 
-Powered by go, it is compiled and statically linked to a single binary. It does not have any dependencies (Python, JRE, bash, ...).
+Powered by go, it is compiled and statically linked to a single binary. It does not have any dependencies (Python, JRE, bash, ...). Just distribute the .exe file.
+
+- The result is written into `<filename>_unprotected.xlsx`
+- The original file remains unchanged
+
+## Download
+[Here](https://github.com/bergfruehling/XLSunprotect/releases/download/v1.0/xlsunprotect.exe)
+
+## Compile
+If you want to compile on your own, install [Go](https://golang.org/).
+```
+# Get libraries
+go get github.com/360EntSecGroup-Skylar/excelize
+go get github.com/fatih/color
+# Build
+go build unprotect.go
+```
+
+## Use
+```
+> unprotect.exe test.xlsx
+Removing protection from .\test.xlsx
+Unprotecting Tabelle1 ...
+Unprotecting Sheet1 ...
+Removing workbook protection...
+Done --> Output in .\test_unprotected.xlsx
+```
 
 ## License (MIT)
 Copyright 2021 Henning Carstens
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Use of this source code is governed by the MIT license that can be found in the LICENSE file.

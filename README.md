@@ -7,7 +7,7 @@ Powered by go, it is compiled and statically linked to a single binary. It does 
 - The original file remains unchanged
 
 ## Download
-[Here](https://github.com/bergfruehling/XLSunprotect/releases/download/v1.0/unprotect.exe)
+[Here](https://github.com/bergfruehling/XLSunprotect/releases/download/v1.0/xlsunprotect.exe)
 
 ## Compile
 If you want to compile on your own, install [Go](https://golang.org/).

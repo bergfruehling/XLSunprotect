@@ -39,10 +39,12 @@ func main() {
 		fatalOnErr(err)
 	}
 
-	fmt.Println("Removing workbook protection...")
-	f.WorkBook.WorkbookProtection.LockStructure = false
-	f.WorkBook.WorkbookProtection.LockRevision = false
-	f.WorkBook.WorkbookProtection.LockWindows = false
+	if f.WorkBook.WorkbookProtection != nil {
+		fmt.Println("Removing workbook protection...")
+		f.WorkBook.WorkbookProtection.LockStructure = false
+		f.WorkBook.WorkbookProtection.LockRevision = false
+		f.WorkBook.WorkbookProtection.LockWindows = false
+	}
 
 	outputFilename := strings.Replace(filename, ".xlsx", "", -1) + "_unprotected.xlsx"
 	if _, err = os.Stat(outputFilename); os.IsNotExist(err) {

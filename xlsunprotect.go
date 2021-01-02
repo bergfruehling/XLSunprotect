@@ -29,6 +29,11 @@ func main() {
 	}
 
 	filename := os.Args[1]
+	if strings.HasSuffix(filename, ".xlsb") {
+		fatalOnErr(errors.New("Only .xlsx is supported: Please open .xlsb in Excel first an save as .xlsx"))
+	} else if !strings.HasSuffix(filename, ".xlsx") {
+		fatalOnErr(errors.New("Only .xlsx is supported"))
+	}
 	f, err := excelize.OpenFile(filename)
 	fatalOnErr(err)
 
@@ -59,6 +64,6 @@ func main() {
 func fatalOnErr(err error) {
 	if err != nil {
 		printError(err)
-		os.Exit(1)
+		os.Exit(0)
 	}
 }

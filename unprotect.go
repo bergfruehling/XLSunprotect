@@ -24,12 +24,17 @@ func main() {
 	f, err := excelize.OpenFile(filename)
 	fatalOnErr(err, "Could not open file: ")
 
-	log.Println("Removing sheet protection from", filename)
+	log.Println("Removing protection from", filename)
 	for _, name := range f.GetSheetMap() {
 		log.Println("Unprotecting", name, "...")
 		err := f.UnprotectSheet(name)
 		fatalOnErr(err, "Could not remove protection for "+name)
 	}
+
+	log.Println("Removing workbook protection...")
+	f.WorkBook.WorkbookProtection.LockStructure = false
+	f.WorkBook.WorkbookProtection.LockRevision = false
+	f.WorkBook.WorkbookProtection.LockWindows = false
 
 	outputFilename := strings.Replace(filename, ".xlsx", "", -1) + "_unprotected.xlsx"
 	err = f.SaveAs(outputFilename)

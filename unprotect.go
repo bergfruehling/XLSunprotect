@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -21,23 +22,24 @@ func main() {
 
 	filename := os.Args[1]
 	f, err := excelize.OpenFile(filename)
-	if err != nil {
-		fmt.Println("Could not open file:", err)
-		return
-	}
+	fatalOnErr(err, "Could not open file: ")
 
-	fmt.Println("Removing sheet protection from", filename)
+	log.Println("Removing sheet protection from", filename)
 	for _, name := range f.GetSheetMap() {
-		fmt.Println("Unprotecting", name, "...")
-		if err := f.UnprotectSheet(name); err != nil {
-			fmt.Println("Could not remove protection for", name, ":", err)
-		}
+		log.Println("Unprotecting", name, "...")
+		err := f.UnprotectSheet(name)
+		fatalOnErr(err, "Could not remove protection for "+name)
 	}
 
 	outputFilename := strings.Replace(filename, ".xlsx", "", -1) + "_unprotected.xlsx"
-	if err := f.SaveAs(outputFilename); err != nil {
-		fmt.Println("Could not write output file:", err)
-		return
+	err = f.SaveAs(outputFilename)
+	fatalOnErr(err, "Could not write output file:")
+
+	log.Println("Done --> Output in", outputFilename)
+}
+
+func fatalOnErr(err error, msg string) {
+	if err != nil {
+		log.Fatal(msg, err)
 	}
-	fmt.Println("Done --> Output in", outputFilename)
 }

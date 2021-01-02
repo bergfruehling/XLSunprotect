@@ -18,4 +18,5 @@ Done --> Output in .\test_unprotected.xlsx
 
 ## License (MIT)
 Copyright 2021 Henning Carstens
+
 Use of this source code is governed by the MIT license that can be found in the LICENSE file.

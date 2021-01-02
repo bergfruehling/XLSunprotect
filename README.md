@@ -3,6 +3,9 @@ XLSunprotect is a commandline tool written in go to remove the workbook and work
 
 Powered by go, it is compiled and statically linked to a single binary. It does not have any dependencies (Python, JRE, bash, ...).
 
+## Download
+[Here](https://github.com/bergfruehling/XLSunprotect/releases/download/v1.0/unprotect.exe)
+
 ## License (MIT)
 Copyright 2021 Henning Carstens
 

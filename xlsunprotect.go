@@ -19,7 +19,7 @@ var printError = color.New(color.Bold, color.FgRed).PrintlnFunc()
 func main() {
 	if len(os.Args) == 1 {
 		fmt.Println("This programs removes the protection from the workbook and all sheets in the XLSX")
-		fmt.Println("2021 Henning Carstens")
+		fmt.Println("(2024) Henning Carstens")
 		fmt.Println()
 		fmt.Println("USAGE: xlsunprotect.exe <filename>.xlsx [<filename2>.xlsx ...]")
 		fmt.Println()
@@ -30,27 +30,37 @@ func main() {
 	}
 
 	for i := 1; i < len(os.Args); i++ {
-		unprotectFile(os.Args[i])
+		println("===================== 💾", os.Args[i], "💾 =====================")
+		err := unprotectFile(os.Args[i])
+		if err != nil {
+			printError("❌ Could not process file", os.Args[i], ":", err)
+		}
+		println()
 	}
+
+	fmt.Println("[Press any key to close...]")
+	fmt.Scanf("h")
 }
 
-func unprotectFile(filename string) {
+func unprotectFile(filename string) error {
 	if strings.HasSuffix(filename, ".xlsb") {
-		fatalOnErr(errors.New("Only .xlsx is supported: Please open .xlsb in Excel first an save as .xlsx"))
+		return errors.New("only .xlsx is supported: Please open .xlsb in Excel first an save as .xlsx")
 	} else if !strings.HasSuffix(filename, ".xlsx") {
-		fatalOnErr(errors.New("Only .xlsx is supported"))
+		return errors.New("only .xlsx is supported")
 	}
 	f, err := excelize.OpenFile(filename)
-	fatalOnErr(err)
+	if err != nil {
+		return err
+	}
 
-	fmt.Println("Removing protection from", filename)
+	fmt.Println("ℹ️ Removing protection from", filename)
 	for _, name := range f.GetSheetMap() {
-		fmt.Println("Unprotecting", name, "...")
+		fmt.Println("ℹ️ Unprotecting", name, "...")
 		f.UnprotectSheet(name)
 	}
 
 	if f.WorkBook.WorkbookProtection != nil {
-		fmt.Println("Removing workbook protection...")
+		fmt.Println("ℹ️ Removing workbook protection...")
 		f.WorkBook.WorkbookProtection.LockStructure = false
 		f.WorkBook.WorkbookProtection.LockRevision = false
 		f.WorkBook.WorkbookProtection.LockWindows = false
@@ -59,19 +69,13 @@ func unprotectFile(filename string) {
 	outputFilename := strings.Replace(filename, ".xlsx", "", -1) + "_unprotected.xlsx"
 	if _, err = os.Stat(outputFilename); os.IsNotExist(err) {
 		err = f.SaveAs(outputFilename)
-		fatalOnErr(err)
-		color.Green("Done --> Output in " + outputFilename)
+		if err != nil {
+			return err
+		}
+		color.Green("✅ Done --> Output in " + outputFilename)
 	} else {
-		fatalOnErr(errors.New(outputFilename + " already exists...exiting."))
+		return errors.New("cannot write to" + outputFilename + " as it already exists.")
 	}
 
-	fmt.Println("[Press any key to close...]")
-	fmt.Scanf("h")
-}
-
-func fatalOnErr(err error) {
-	if err != nil {
-		printError(err)
-		os.Exit(0)
-	}
+	return nil
 }

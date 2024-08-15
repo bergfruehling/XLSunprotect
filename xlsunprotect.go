@@ -17,18 +17,24 @@ import (
 var printError = color.New(color.Bold, color.FgRed).PrintlnFunc()
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) == 1 {
 		fmt.Println("This programs removes the protection from the workbook and all sheets in the XLSX")
-		fmt.Println("https://github.com/bergfruehling/XLSunprotect")
+		fmt.Println("2021 Henning Carstens")
 		fmt.Println()
-		fmt.Println("USAGE: xlsunprotect.exe <filename>.xlsx")
+		fmt.Println("USAGE: xlsunprotect.exe <filename>.xlsx [<filename2>.xlsx ...]")
 		fmt.Println()
 		fmt.Println("- The result is written into <filename>_unprotected.xlsx")
+		fmt.Println("- If <filename>_unprotected.xlsx already exists, it remains unchanged and the program stops")
 		fmt.Println("- The original file remains unchanged")
 		return
 	}
 
-	filename := os.Args[1]
+	for i := 1; i < len(os.Args); i++ {
+		unprotectFile(os.Args[i])
+	}
+}
+
+func unprotectFile(filename string) {
 	if strings.HasSuffix(filename, ".xlsb") {
 		fatalOnErr(errors.New("Only .xlsx is supported: Please open .xlsb in Excel first an save as .xlsx"))
 	} else if !strings.HasSuffix(filename, ".xlsx") {
@@ -40,8 +46,7 @@ func main() {
 	fmt.Println("Removing protection from", filename)
 	for _, name := range f.GetSheetMap() {
 		fmt.Println("Unprotecting", name, "...")
-		err := f.UnprotectSheet(name)
-		fatalOnErr(err)
+		f.UnprotectSheet(name)
 	}
 
 	if f.WorkBook.WorkbookProtection != nil {
@@ -59,6 +64,9 @@ func main() {
 	} else {
 		fatalOnErr(errors.New(outputFilename + " already exists...exiting."))
 	}
+
+	fmt.Println("[Press any key to close...]")
+	fmt.Scanf("h")
 }
 
 func fatalOnErr(err error) {

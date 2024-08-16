@@ -1,4 +1,4 @@
-// Copyright 2021 Henning Carstens. All rights reserved.
+// Copyright 2021-2024 Henning Carstens. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
@@ -19,7 +19,7 @@ var printError = color.New(color.Bold, color.FgRed).PrintlnFunc()
 func main() {
 	if len(os.Args) == 1 {
 		fmt.Println("This programs removes the protection from the workbook and all sheets in the XLSX")
-		fmt.Println("(2024) Henning Carstens")
+		fmt.Println("(Henning Carstens)")
 		fmt.Println()
 		fmt.Println("USAGE: xlsunprotect.exe <filename>.xlsx [<filename2>.xlsx ...]")
 		fmt.Println()
